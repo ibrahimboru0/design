@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Börü Design</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{--white:#ffffff;--off-white:#f8f7f5;--light:#eeece8;--mid:#9b9690;--dark:#2e2c2a;--black:#111110;}
+html{scroll-behavior:smooth;}
+body{font-family:'Jost',sans-serif;background:var(--white);color:var(--black);overflow-x:hidden;}
+
+/* TOPBAR */
+.topbar{background:var(--white);border-bottom:1px solid var(--light);position:sticky;top:0;z-index:200;transition:box-shadow 0.3s;}
+.topbar-inner{max-width:1400px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:64px;}
+.logo{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;letter-spacing:0.06em;color:var(--black);text-decoration:none;white-space:nowrap;}
+.cat-nav{display:flex;align-items:center;flex:1;justify-content:center;}
+.cat-nav a{font-family:'Jost',sans-serif;font-size:13px;font-weight:400;letter-spacing:0.03em;color:var(--dark);text-decoration:none;padding:0 18px;height:64px;display:flex;align-items:center;border-bottom:2px solid transparent;transition:color 0.2s,border-color 0.2s;white-space:nowrap;}
+.cat-nav a:hover,.cat-nav a.active{color:var(--black);border-bottom-color:var(--black);}
+.btn-outline{font-family:'Jost',sans-serif;font-size:12px;letter-spacing:0.06em;color:var(--dark);border:1px solid #ccc;padding:8px 20px;text-decoration:none;transition:all 0.2s;white-space:nowrap;}
+.btn-outline:hover{background:var(--black);color:var(--white);border-color:var(--black);}
+
+/* HERO */
+.hero{position:relative;width:100%;height:calc(100vh - 64px);overflow:hidden;background:var(--black);}
+.slide{position:absolute;inset:0;opacity:0;transition:opacity 1.2s ease;}
+.slide.active{opacity:1;}
+.slide-bg{position:absolute;inset:0;transition:transform 6s ease;transform:scale(1.04);overflow:hidden;}
+.slide.active .slide-bg{transform:scale(1);}
+.slide-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.72) 0%,rgba(0,0,0,0.25) 50%,rgba(0,0,0,0.1) 100%);z-index:1;}
+.slide-bg svg{width:100%;height:100%;display:block;}
+.hero-content{position:absolute;bottom:80px;left:60px;z-index:10;color:var(--white);}
+.hero-tag{font-family:'Jost',sans-serif;font-size:11px;font-weight:400;letter-spacing:0.28em;text-transform:uppercase;color:rgba(255,255,255,0.55);margin-bottom:18px;display:flex;align-items:center;gap:14px;}
+.hero-tag::before{content:'';width:28px;height:1px;background:rgba(255,255,255,0.4);}
+.hero-title{font-family:'Playfair Display',serif;font-size:clamp(52px,7vw,100px);font-weight:400;line-height:1.04;color:var(--white);margin-bottom:20px;max-width:660px;}
+.hero-title em{font-style:italic;}
+.hero-sub{font-family:'EB Garamond',serif;font-size:18px;color:rgba(255,255,255,0.5);font-style:italic;}
+.slider-controls{position:absolute;bottom:80px;right:60px;z-index:10;display:flex;gap:10px;}
+.slider-btn{width:44px;height:44px;border:1px solid rgba(255,255,255,0.25);background:rgba(0,0,0,0.25);color:var(--white);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.25s;backdrop-filter:blur(4px);}
+.slider-btn:hover{background:rgba(255,255,255,0.12);border-color:rgba(255,255,255,0.55);}
+.slider-dots{position:absolute;bottom:36px;left:50%;transform:translateX(-50%);z-index:10;display:flex;gap:8px;}
+.dot{width:28px;height:2px;background:rgba(255,255,255,0.28);cursor:pointer;transition:all 0.3s;}
+.dot.active{background:var(--white);width:44px;}
+
+/* FEATURED */
+.featured-section{background:var(--off-white);border-top:1px solid var(--light);border-bottom:1px solid var(--light);}
+.featured-inner{max-width:1400px;margin:0 auto;padding:80px 40px;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;}
+.featured-visual{position:relative;aspect-ratio:16/11;background:linear-gradient(135deg,#1e1e1e,#2e2e2e);overflow:hidden;}
+.featured-visual-art{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:180px;font-style:italic;color:rgba(255,255,255,0.04);user-select:none;}
+.featured-label{font-family:'Jost',sans-serif;font-size:10px;letter-spacing:0.3em;text-transform:uppercase;color:var(--mid);margin-bottom:20px;display:flex;align-items:center;gap:14px;}
+.featured-label::before{content:'';width:24px;height:1px;background:var(--mid);}
+.featured-title{font-family:'Playfair Display',serif;font-size:48px;font-weight:400;line-height:1.1;color:var(--black);margin-bottom:24px;}
+.featured-title em{font-style:italic;}
+.featured-desc{font-family:'EB Garamond',serif;font-size:18px;line-height:1.9;color:#666;margin-bottom:36px;}
+.btn-primary{display:inline-flex;align-items:center;gap:12px;font-family:'Jost',sans-serif;font-size:12px;letter-spacing:0.15em;text-transform:uppercase;color:var(--white);background:var(--black);padding:14px 32px;text-decoration:none;transition:background 0.25s;}
+.btn-primary:hover{background:#333;}
+.btn-primary::after{content:'→';font-size:14px;letter-spacing:0;}
+
+/* STATS */
+.stats-bar{background:var(--black);padding:48px 40px;}
+.stats-inner{max-width:1400px;margin:0 auto;display:flex;justify-content:space-around;align-items:center;}
+.stat-item{text-align:center;}
+.stat-num{font-family:'Playfair Display',serif;font-size:48px;font-weight:400;font-style:italic;color:var(--white);line-height:1;margin-bottom:8px;}
+.stat-label{font-family:'Jost',sans-serif;font-size:10px;letter-spacing:0.25em;text-transform:uppercase;color:#555;}
+.stat-divider{width:1px;height:48px;background:#222;}
+
+/* WORKS PAGE */
+.wp-header{max-width:1400px;margin:0 auto;padding:50px 40px 28px;border-bottom:1px solid var(--light);}
+.wp-title{font-family:'Playfair Display',serif;font-size:38px;font-weight:400;color:var(--black);margin-bottom:4px;}
+.wp-title em{font-style:italic;}
+.wp-subtitle{font-family:'EB Garamond',serif;font-size:16px;font-style:italic;color:var(--mid);}
+.wp-filters{max-width:1400px;margin:0 auto;padding:0 40px;display:flex;align-items:center;border-bottom:1px solid var(--light);}
+.wp-filter-btn{font-family:'Jost',sans-serif;font-size:12px;letter-spacing:0.15em;text-transform:uppercase;color:var(--mid);border:none;background:none;padding:15px 18px;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all 0.25s;}
+.wp-filter-btn:hover,.wp-filter-btn.active{color:var(--black);border-bottom-color:var(--black);}
+.wp-count{margin-left:auto;font-family:'Jost',sans-serif;font-size:11px;color:var(--mid);letter-spacing:0.06em;}
+.wp-grid{max-width:1400px;margin:0 auto;padding:28px 38px 80px;display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+.wp-card{background:#fff;cursor:pointer;display:block;text-decoration:none;color:inherit;border:1px solid #eee;transition:box-shadow 0.3s;}
+.wp-card:hover{box-shadow:0 6px 28px rgba(0,0,0,0.1);}
+.wp-card-photo{width:100%;aspect-ratio:4/3;overflow:hidden;position:relative;background:var(--light);}
+.wp-card-photo-inner{width:100%;height:100%;transition:transform 0.55s cubic-bezier(0.25,0.46,0.45,0.94);}
+.wp-card:hover .wp-card-photo-inner{transform:scale(1.04);}
+.wp-card-photo-inner svg{width:100%;height:100%;display:block;}
+.wp-card-badge{position:absolute;top:12px;left:12px;font-family:'Jost',sans-serif;font-size:10px;letter-spacing:0.16em;text-transform:uppercase;background:rgba(255,255,255,0.93);color:#333;padding:4px 10px;}
+.wp-card-num{position:absolute;bottom:10px;right:12px;font-family:'Jost',sans-serif;font-size:10px;color:rgba(255,255,255,0.8);letter-spacing:0.06em;}
+.wp-card-bottom{background:#fff;padding:12px 16px 14px;border-top:1px solid #eee;display:flex;justify-content:space-between;align-items:flex-start;}
+.wp-card-bottom-name{font-family:'Playfair Display',serif;font-size:15px;font-weight:400;color:#111;margin-bottom:2px;line-height:1.3;}
+.wp-card-bottom-detail{font-family:'Jost',sans-serif;font-size:11px;color:#888;letter-spacing:0.03em;}
+.wp-card-bottom-date{font-family:'Jost',sans-serif;font-size:10px;color:#aaa;letter-spacing:0.06em;white-space:nowrap;margin-top:2px;text-align:right;}
+.wp-empty{grid-column:1/-1;text-align:center;padding:80px 0;font-family:'EB Garamond',serif;font-size:20px;font-style:italic;color:var(--mid);}
+
+/* FOOTER */
+footer{background:var(--white);border-top:1px solid var(--light);}
+.footer-inner{max-width:1400px;margin:0 auto;padding:60px 40px 40px;}
+.footer-top{display:flex;justify-content:space-between;align-items:flex-start;padding-bottom:48px;border-bottom:1px solid var(--light);margin-bottom:32px;gap:60px;}
+.footer-brand .logo{font-size:24px;display:block;margin-bottom:12px;}
+.footer-tagline{font-family:'EB Garamond',serif;font-size:15px;font-style:italic;color:var(--mid);line-height:1.7;max-width:260px;}
+.footer-cols{display:flex;gap:80px;}
+.footer-col h5{font-family:'Jost',sans-serif;font-size:10px;font-weight:500;letter-spacing:0.2em;text-transform:uppercase;color:var(--black);margin-bottom:20px;}
+.footer-col ul{list-style:none;}
+.footer-col ul li{margin-bottom:10px;font-family:'Jost',sans-serif;font-size:13px;color:var(--mid);cursor:pointer;transition:color 0.2s;}
+.footer-col ul li:hover{color:var(--black);}
+.footer-bottom{display:flex;justify-content:space-between;align-items:center;}
+.footer-copy{font-family:'Jost',sans-serif;font-size:12px;color:#bbb;}
+.footer-quote{font-family:'EB Garamond',serif;font-size:14px;font-style:italic;color:#bbb;}
+
+@media(max-width:900px){.wp-grid{grid-template-columns:repeat(2,1fr);}.featured-inner{grid-template-columns:1fr;}.cat-nav{display:none;}}
+
+/* SUB CATEGORY BAR */
+.sub-cat-bar{background:var(--white);border-bottom:1px solid var(--light);}
+.sub-cat-inner{max-width:1400px;margin:0 auto;padding:0 40px;display:flex;align-items:center;justify-content:center;gap:2px;}
+.sub-cat-link{font-family:'Jost',sans-serif;font-size:12px;font-weight:400;letter-spacing:0.12em;text-transform:uppercase;color:var(--mid);padding:12px 20px;cursor:pointer;border-bottom:2px solid transparent;transition:color 0.2s,border-color 0.2s;white-space:nowrap;user-select:none;}
+.sub-cat-link:hover,.sub-cat-link.active{color:var(--black);border-bottom-color:var(--black);}
+@media(max-width:600px){.wp-grid{grid-template-columns:1fr;padding:16px;}}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<header class="topbar" id="topbar">
+  <div class="topbar-inner">
+    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2MDAgMzYwIiB3aWR0aD0iNjAwIiBoZWlnaHQ9IjM2MCI+CiAgPGRlZnM+CiAgICA8c3R5bGU+QGltcG9ydCB1cmwoJ2h0dHBzOi8vZm9udHMuZ29vZ2xlYXBpcy5jb20vY3NzMj9mYW1pbHk9UGxheWZhaXIrRGlzcGxheTp3Z2h0QDkwMCZhbXA7ZmFtaWx5PUpvc3Q6d2dodEA1MDAmYW1wO2Rpc3BsYXk9c3dhcCcpOzwvc3R5bGU+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9InJpbUdyYWQiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMCUiIHkyPSIxMDAlIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgICBzdG9wLWNvbG9yPSIjYzBjMGMwIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iMjAlIiAgc3RvcC1jb2xvcj0iIzJhMmEyYSIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjQ4JSIgIHN0b3AtY29sb3I9IiM4ODgiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSI3MiUiICBzdG9wLWNvbG9yPSIjMTExIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2FhYSIvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICAgIDxyYWRpYWxHcmFkaWVudCBpZD0iZmFjZUZpbGwiIGN4PSI1MCUiIGN5PSIzOCUiIHI9IjU4JSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiICAgc3RvcC1jb2xvcj0iI2ZmZmZmZiIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNlOGU4ZTgiLz4KICAgIDwvcmFkaWFsR3JhZGllbnQ+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImJvcnVHcmFkIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjAlIiB5Mj0iMTAwJSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiICAgc3RvcC1jb2xvcj0iIzRhNGE0YSIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjM1JSIgIHN0b3AtY29sb3I9IiMwNTA1MDUiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSI2NSUiICBzdG9wLWNvbG9yPSIjMDAwMDAwIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzNhM2EzYSIvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICAgIDxmaWx0ZXIgaWQ9InRzIiB4PSItMiUiIHk9Ii01JSIgd2lkdGg9IjEwNCUiIGhlaWdodD0iMTE1JSI+CiAgICAgIDxmZURyb3BTaGFkb3cgZHg9IjEiIGR5PSIyLjUiIHN0ZERldmlhdGlvbj0iMSIgZmxvb2QtY29sb3I9IiMwMDAiIGZsb29kLW9wYWNpdHk9IjAuNiIvPgogICAgPC9maWx0ZXI+CiAgICA8ZmlsdGVyIGlkPSJkcyIgeD0iLTIlIiB5PSItMiUiIHdpZHRoPSIxMDQlIiBoZWlnaHQ9IjEwOCUiPgogICAgICA8ZmVEcm9wU2hhZG93IGR4PSIwIiBkeT0iMS41IiBzdGREZXZpYXRpb249IjAuNiIgZmxvb2QtY29sb3I9IiMwMDAiIGZsb29kLW9wYWNpdHk9IjAuMyIvPgogICAgPC9maWx0ZXI+CiAgPC9kZWZzPgoKICA8IS0tIE92YWwgZnJhbWUgLS0+CiAgPGVsbGlwc2UgY3g9IjMwMCIgY3k9IjE4MCIgcng9IjI5NiIgcnk9IjE3NSIgZmlsbD0iIzBkMGQwZCIvPgogIDxlbGxpcHNlIGN4PSIzMDAiIGN5PSIxODAiIHJ4PSIyODYiIHJ5PSIxNjUiIGZpbGw9InVybCgjcmltR3JhZCkiLz4KICA8ZWxsaXBzZSBjeD0iMzAwIiBjeT0iMTgwIiByeD0iMjcwIiByeT0iMTQ5IiBmaWxsPSIjMTExIi8+CiAgPGVsbGlwc2UgY3g9IjMwMCIgY3k9IjE4MCIgcng9IjI2MiIgcnk9IjE0MSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjYmJiIiBzdHJva2Utd2lkdGg9IjEuNSIvPgogIDxlbGxpcHNlIGN4PSIzMDAiIGN5PSIxODAiIHJ4PSIyNTYiIHJ5PSIxMzUiIGZpbGw9InVybCgjZmFjZUZpbGwpIi8+CiAgPGVsbGlwc2UgY3g9IjMwMCIgY3k9IjE4MCIgcng9IjI1NiIgcnk9IjEzNSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMTExIiBzdHJva2Utd2lkdGg9IjMiLz4KCiAgPCEtLSBDTElQOiBvbmx5IHJlbmRlciB0ZXh0IGluc2lkZSB0aGUgd2hpdGUgb3ZhbCBmYWNlIC0tPgogIDxjbGlwUGF0aCBpZD0iZmFjZUNsaXAiPgogICAgPGVsbGlwc2UgY3g9IjMwMCIgY3k9IjE4MCIgcng9IjI1MyIgcnk9IjEzMiIvPgogIDwvY2xpcFBhdGg+CgogIDxnIGNsaXAtcGF0aD0idXJsKCNmYWNlQ2xpcCkiPgogICAgPCEtLSBCw5ZSw5wg4oCUIGJhc2VsaW5lIGF0IDE3NSwgc28gYXNjZW5kZXJzK2RpYWNyaXRpY3Mgc3RheSBpbnNpZGUgb3ZhbCAtLT4KICAgIDx0ZXh0IHg9IjMwMCIgeT0iMTY4IgogICAgICBmb250LWZhbWlseT0iJ1BsYXlmYWlyIERpc3BsYXknLCdEaWRvdCcsJ0JvZG9uaSBNVCcsJ1RpbWVzIE5ldyBSb21hbicsc2VyaWYiCiAgICAgIGZvbnQtc2l6ZT0iMTA0IgogICAgICBmb250LXdlaWdodD0iOTAwIgogICAgICB0ZXh0LWFuY2hvcj0ibWlkZGxlIgogICAgICBsZXR0ZXItc3BhY2luZz0iNiIKICAgICAgZmlsbD0idXJsKCNib3J1R3JhZCkiCiAgICAgIGZpbHRlcj0idXJsKCN0cykiPkLDllLDnDwvdGV4dD4KCiAgICA8IS0tIERpdmlkZXIgbGluZXMgLS0+CiAgICA8bGluZSB4MT0iODAiICB5MT0iMTgyIiB4Mj0iNTIwIiB5Mj0iMTgyIiBzdHJva2U9IiM0NDQiIHN0cm9rZS13aWR0aD0iMS4yIi8+CiAgICA8bGluZSB4MT0iODAiICB5MT0iMTg2IiB4Mj0iNTIwIiB5Mj0iMTg2IiBzdHJva2U9IiNjY2MiIHN0cm9rZS13aWR0aD0iMC42Ii8+CgogICAgPCEtLSBERVNJR04gLS0+CiAgICA8dGV4dCB4PSIzMDAiIHk9IjI0NCIKICAgICAgZm9udC1mYW1pbHk9IidKb3N0JywnR2lsbCBTYW5zJywnQ2VudHVyeSBHb3RoaWMnLCdGdXR1cmEnLEFyaWFsLHNhbnMtc2VyaWYiCiAgICAgIGZvbnQtc2l6ZT0iNDIiCiAgICAgIGZvbnQtd2VpZ2h0PSI1MDAiCiAgICAgIHRleHQtYW5jaG9yPSJtaWRkbGUiCiAgICAgIGxldHRlci1zcGFjaW5nPSIyMCIKICAgICAgZmlsbD0iIzBkMGQwZCIKICAgICAgZmlsdGVyPSJ1cmwoI2RzKSI+REVTSUdOPC90ZXh0PgogIDwvZz4KCjwvc3ZnPg==" id="logoLink" style="height:70px;cursor:pointer;display:block;object-fit:contain;" alt="Börü Design"/>
+    <nav class="cat-nav">
+      <a href="#" class="active" data-page="works" data-cat="all">Tümü</a>
+      <a href="#" data-page="home" data-cat="otomobil">Otomobil</a>
+      <a href="#" data-page="home" data-cat="motorsiklet">Motorsiklet</a>
+      <a href="#" data-page="home" data-cat="yat">Yat</a>
+      <a href="#" data-page="home" data-cat="ofis">Ofis</a>
+      <a href="#" data-page="home" data-cat="mekan">Mekan</a>
+    </nav>
+    <div style="display:flex;gap:10px;align-items:center;">
+      <a href="#" class="btn-outline" id="allWorksBtn">Tüm Çalışmalar</a>
+      <button class="btn-outline" id="loginBtn" style="border:1px solid #ccc;background:none;cursor:pointer;font-family:'Jost',sans-serif;font-size:12px;letter-spacing:0.06em;color:var(--dark);padding:8px 20px;">Giriş</button>
+    </div>
+  </div>
+</header>
+
+<!-- SUB CATEGORY BAR -->
+<div class="sub-cat-bar" id="subCatBar">
+  <div class="sub-cat-inner">
+    <span class="sub-cat-link" onclick="goToWorks('otomobil',this)">Otomobil</span>
+    <span class="sub-cat-link" onclick="goToWorks('motorsiklet',this)">Motorsiklet</span>
+    <span class="sub-cat-link" onclick="goToWorks('yat',this)">Yat</span>
+    <span class="sub-cat-link" onclick="goToWorks('ofis',this)">Ofis</span>
+    <span class="sub-cat-link" onclick="goToWorks('mekan',this)">Mekan</span>
+  </div>
+</div>
+
+<!-- ══════ HOME PAGE ══════ -->
+<div id="homePage" style="display:none;">
+
+<!-- HERO SLIDER -->
+<section class="hero">
+  <!-- Slide 1: Otomobil -->
+  <div class="slide active" data-slide="otomobil">
+    <div class="slide-bg">
+      <svg viewBox="0 0 1440 810" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+        <defs><radialGradient id="sky1" cx="50%" cy="0%" r="80%"><stop offset="0%" stop-color="#1a2040"/><stop offset="100%" stop-color="#05070f"/></radialGradient><radialGradient id="hl1" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#fff8e0" stop-opacity="0.9"/><stop offset="100%" stop-color="#fff8e0" stop-opacity="0"/></radialGradient><filter id="glow1"><feGaussianBlur stdDeviation="18" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+        <rect width="1440" height="810" fill="url(#sky1)"/>
+        <circle cx="200" cy="80" r="1.2" fill="white" opacity="0.6"/><circle cx="380" cy="50" r="0.8" fill="white" opacity="0.5"/><circle cx="900" cy="60" r="1.5" fill="white" opacity="0.7"/><circle cx="1100" cy="90" r="0.9" fill="white" opacity="0.5"/><circle cx="1300" cy="40" r="1.1" fill="white" opacity="0.6"/><circle cx="700" cy="30" r="0.7" fill="white" opacity="0.4"/>
+        <path d="M0 480 L180 280 L320 380 L500 200 L680 360 L820 240 L1000 340 L1200 180 L1440 300 L1440 810 L0 810Z" fill="#0d1020"/>
+        <path d="M400 810 L720 480 L1040 810Z" fill="#141428"/><path d="M500 810 L720 480 L940 810Z" fill="#141428" opacity="0.8"/>
+        <line x1="720" y1="560" x2="720" y2="700" stroke="#888855" stroke-width="3" stroke-dasharray="30 20" opacity="0.4"/>
+        <g transform="translate(480,500)"><ellipse cx="240" cy="195" rx="220" ry="18" fill="black" opacity="0.6"/><path d="M40 165 Q60 135 120 118 L200 105 L310 105 L390 118 Q430 132 445 155 L450 170 L445 175 L35 175 Z" fill="#b8bcc8"/><path d="M120 118 L200 105 L310 105 L390 118 Q380 108 310 100 L200 100 L120 112Z" fill="#d8dce8" opacity="0.5"/><path d="M160 118 Q200 75 260 72 L320 72 Q360 74 390 105 L390 118 Z" fill="#a8acb8"/><path d="M165 118 Q200 80 260 77 L315 77 Q350 80 385 110 L385 118 Z" fill="#c8ccd8" opacity="0.4"/><path d="M168 115 Q200 82 258 79 L310 79 Q345 82 382 110 L382 115 Z" fill="#1a2a3a" opacity="0.85"/><line x1="270" y1="79" x2="268" y2="115" stroke="#fff" stroke-width="1" opacity="0.3"/><circle cx="130" cy="175" r="42" fill="#1a1a1a"/><circle cx="130" cy="175" r="28" fill="#333"/><circle cx="130" cy="175" r="12" fill="#888"/><circle cx="370" cy="175" r="42" fill="#1a1a1a"/><circle cx="370" cy="175" r="28" fill="#333"/><circle cx="370" cy="175" r="12" fill="#888"/><ellipse cx="440" cy="148" rx="16" ry="8" fill="#fff8d0"/><ellipse cx="440" cy="148" rx="10" ry="5" fill="white"/><rect x="38" y="148" width="18" height="6" rx="2" fill="#ff2200" opacity="0.8"/></g>
+        <ellipse cx="940" cy="570" rx="300" ry="80" fill="url(#hl1)" opacity="0.5" filter="url(#glow1)"/>
+      </svg>
+    </div>
+    <div class="hero-content"><div class="hero-tag">Otomobil</div><h1 class="hero-title">Form ile <em>Hızın</em><br>Buluşması</h1><p class="hero-sub">Araç tasarımı konseptleri</p></div>
+  </div>
+
+  <!-- Slide 2: Motorsiklet -->
+  <div class="slide" data-slide="motorsiklet">
+    <div class="slide-bg">
+      <svg viewBox="0 0 1440 810" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+        <rect width="1440" height="810" fill="#0a0a0a"/>
+        <rect x="0" y="560" width="1440" height="250" fill="#111"/>
+        <line x1="0" y1="560" x2="1440" y2="560" stroke="#222" stroke-width="1"/>
+        <defs><radialGradient id="spot" cx="50%" cy="0%" r="70%"><stop offset="0%" stop-color="#ffffff" stop-opacity="0.13"/><stop offset="100%" stop-color="#ffffff" stop-opacity="0"/></radialGradient></defs>
+        <ellipse cx="720" cy="0" rx="500" ry="700" fill="url(#spot)"/>
+        <g transform="translate(160,230)"><ellipse cx="460" cy="340" rx="360" ry="24" fill="black" opacity="0.7"/><circle cx="195" cy="310" r="110" fill="#111"/><circle cx="195" cy="310" r="94" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="2"/><circle cx="195" cy="310" r="58" fill="#222"/><circle cx="195" cy="310" r="26" fill="#444"/><circle cx="605" cy="310" r="110" fill="#111"/><circle cx="605" cy="310" r="94" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="2"/><circle cx="605" cy="310" r="58" fill="#222"/><circle cx="605" cy="310" r="26" fill="#444"/><path d="M195 200 L340 158 L490 176 L605 198" stroke="#666" stroke-width="6" fill="none"/><path d="M195 198 L268 310 L400 310 L500 310" stroke="#555" stroke-width="5" fill="none"/><path d="M295 158 Q400 128 490 156 L490 186 Q400 162 298 186Z" fill="#cc2200"/><path d="M295 158 Q400 128 490 156 L488 170 Q400 140 300 168Z" fill="#ff3300" opacity="0.45"/><path d="M490 166 Q550 138 578 156 L592 180 L578 180 L490 194Z" fill="#cc2200"/><ellipse cx="582" cy="190" rx="18" ry="12" fill="#ffeeaa"/><ellipse cx="582" cy="190" rx="11" ry="7" fill="white"/><path d="M490 176 Q474 176 462 308" stroke="#555" stroke-width="8" fill="none"/><path d="M516 178 Q502 178 494 308" stroke="#555" stroke-width="8" fill="none"/><path d="M248 298 L194 304 L182 310" stroke="#777" stroke-width="8" fill="none" stroke-linecap="round"/><rect x="308" y="185" width="120" height="70" rx="5" fill="#1e1e1e"/><path d="M245 296 Q208 312 178 318" stroke="#666" stroke-width="9" fill="none" stroke-linecap="round"/></g>
+      </svg>
+    </div>
+    <div class="hero-content"><div class="hero-tag">Motorsiklet</div><h1 class="hero-title"><em>Özgürlüğün</em><br>Biçimi</h1><p class="hero-sub">Motosiklet tasarımı konseptleri</p></div>
+  </div>
+
+  <!-- Slide 3: Yat -->
+  <div class="slide" data-slide="yat">
+    <div class="slide-bg">
+      <svg viewBox="0 0 1440 810" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+        <defs><linearGradient id="sky2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#0a1628"/><stop offset="40%" stop-color="#1a3a6a"/><stop offset="70%" stop-color="#2a5a9a"/><stop offset="100%" stop-color="#1a3060"/></linearGradient><linearGradient id="sea" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1a3a6a"/><stop offset="100%" stop-color="#060e1c"/></linearGradient><radialGradient id="sun2" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#ffdd88" stop-opacity="0.9"/><stop offset="60%" stop-color="#ff8800" stop-opacity="0.4"/><stop offset="100%" stop-color="#ff4400" stop-opacity="0"/></radialGradient></defs>
+        <rect width="1440" height="810" fill="url(#sky2)"/>
+        <ellipse cx="720" cy="320" rx="200" ry="180" fill="url(#sun2)" opacity="0.35"/>
+        <circle cx="720" cy="320" r="45" fill="#ffeeaa" opacity="0.7"/>
+        <rect x="0" y="420" width="1440" height="390" fill="url(#sea)"/>
+        <path d="M0 450 Q360 432 720 452 Q1080 468 1440 448" stroke="#4488cc" stroke-width="1.5" fill="none" opacity="0.4"/>
+        <path d="M0 490 Q360 472 720 488 Q1080 502 1440 488" stroke="#3377bb" stroke-width="1" fill="none" opacity="0.3"/>
+        <g transform="translate(320,300)"><line x1="400" y1="260" x2="400" y2="-20" stroke="#ccc" stroke-width="3"/><line x1="400" y1="80" x2="680" y2="200" stroke="#bbb" stroke-width="1.5" opacity="0.7"/><line x1="400" y1="40" x2="100" y2="200" stroke="#bbb" stroke-width="1.5" opacity="0.7"/><path d="M400 -20 L680 200 L400 200Z" fill="white" opacity="0.92"/><path d="M400 40 L100 200 L400 200Z" fill="white" opacity="0.75"/><path d="M80 200 Q240 230 400 232 Q560 230 720 200 L700 240 Q500 268 400 270 Q300 268 100 240Z" fill="#1a1a2a"/><path d="M100 240 Q300 264 400 266 Q500 264 700 240" stroke="#4488ff" stroke-width="2" fill="none" opacity="0.5"/></g>
+        <path d="M0 420 Q360 405 720 415 Q1080 422 1440 410 L1440 425 L0 430Z" fill="#0a1828" opacity="0.5"/>
+      </svg>
+    </div>
+    <div class="hero-content"><div class="hero-tag">Yat</div><h1 class="hero-title"><em>Denizde</em><br>Saf Estetik</h1><p class="hero-sub">Deniz araçları tasarımı</p></div>
+  </div>
+
+  <!-- Slide 4: Ofis -->
+  <div class="slide" data-slide="ofis">
+    <div class="slide-bg">
+      <svg viewBox="0 0 1440 810" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+        <defs><linearGradient id="ow" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#0e0e10"/><stop offset="100%" stop-color="#181818"/></linearGradient><linearGradient id="of2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1a1a1c"/><stop offset="100%" stop-color="#0a0a0c"/></linearGradient><radialGradient id="sg" cx="50%" cy="50%" r="60%"><stop offset="0%" stop-color="#4488ff" stop-opacity="0.25"/><stop offset="100%" stop-color="#4488ff" stop-opacity="0"/></radialGradient><filter id="sfg"><feGaussianBlur stdDeviation="10"/></filter></defs>
+        <rect width="1440" height="810" fill="#0c0c0e"/>
+        <rect x="0" y="0" width="1440" height="650" fill="url(#ow)"/>
+        <rect x="60" y="80" width="340" height="500" fill="#050a14"/><rect x="64" y="84" width="332" height="492" fill="#060c18"/>
+        <rect x="80" y="340" width="8" height="220" fill="#ffdd66" opacity="0.4"/><rect x="100" y="300" width="12" height="260" fill="#ffcc44" opacity="0.35"/><rect x="145" y="280" width="14" height="280" fill="#ffcc44" opacity="0.38"/><rect x="196" y="350" width="10" height="210" fill="#aaccff" opacity="0.3"/><rect x="220" y="290" width="12" height="270" fill="#ffcc44" opacity="0.35"/><rect x="268" y="260" width="16" height="300" fill="#ffcc44" opacity="0.4"/><rect x="350" y="280" width="14" height="280" fill="#ffcc44" opacity="0.35"/>
+        <rect x="56" y="76" width="348" height="508" fill="none" stroke="#222" stroke-width="6"/>
+        <line x1="230" y1="76" x2="230" y2="584" stroke="#222" stroke-width="4"/>
+        <line x1="56" y1="330" x2="404" y2="330" stroke="#222" stroke-width="4"/>
+        <rect x="1040" y="80" width="340" height="500" fill="#050a14"/><rect x="1044" y="84" width="332" height="492" fill="#060c18"/>
+        <rect x="1060" y="330" width="8" height="230" fill="#ffdd66" opacity="0.38"/><rect x="1125" y="270" width="14" height="290" fill="#ffcc44" opacity="0.4"/><rect x="1200" y="300" width="12" height="260" fill="#ffdd66" opacity="0.35"/><rect x="1248" y="260" width="16" height="300" fill="#ffcc44" opacity="0.4"/><rect x="1330" y="280" width="14" height="280" fill="#ffcc44" opacity="0.35"/>
+        <rect x="1036" y="76" width="348" height="508" fill="none" stroke="#222" stroke-width="6"/>
+        <line x1="1210" y1="76" x2="1210" y2="584" stroke="#222" stroke-width="4"/>
+        <line x1="1036" y1="330" x2="1384" y2="330" stroke="#222" stroke-width="4"/>
+        <rect x="0" y="648" width="1440" height="162" fill="url(#of2)"/>
+        <rect x="300" y="590" width="840" height="58" rx="3" fill="#2a2420"/>
+        <ellipse cx="720" cy="500" rx="200" ry="130" fill="url(#sg)" filter="url(#sfg)"/>
+        <rect x="570" y="420" width="300" height="190" rx="5" fill="#0e0e10"/>
+        <rect x="578" y="428" width="284" height="174" rx="3" fill="#0a1020"/>
+        <rect x="590" y="436" width="80" height="6" rx="1" fill="#4488ff" opacity="0.7"/>
+        <rect x="592" y="450" width="260" height="1" fill="#1e2836"/>
+        <rect x="592" y="460" width="60" height="50" rx="2" fill="#0e1828" stroke="#1e3050" stroke-width="1"/>
+        <rect x="660" y="460" width="60" height="50" rx="2" fill="#0e1828" stroke="#1e3050" stroke-width="1"/>
+        <rect x="728" y="460" width="60" height="50" rx="2" fill="#0e1828" stroke="#1e3050" stroke-width="1"/>
+      </svg>
+    </div>
+    <div class="hero-content"><div class="hero-tag">Ofis & İş Yeri</div><h1 class="hero-title">Üretkenliğin<br><em>Mimarisi</em></h1><p class="hero-sub">Çalışma alanı tasarımları</p></div>
+  </div>
+
+  <!-- Slide 5: Mekan -->
+  <div class="slide" data-slide="mekan">
+    <div class="slide-bg">
+      <svg viewBox="0 0 1440 810" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+        <defs><linearGradient id="rl" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#2a1e10"/><stop offset="100%" stop-color="#0e0a06"/></linearGradient><radialGradient id="lp1" cx="50%" cy="0%" r="100%"><stop offset="0%" stop-color="#ffcc66" stop-opacity="0.9"/><stop offset="100%" stop-color="#ff8800" stop-opacity="0"/></radialGradient><radialGradient id="lp2" cx="50%" cy="0%" r="100%"><stop offset="0%" stop-color="#ffdd88" stop-opacity="0.7"/><stop offset="100%" stop-color="#ff9900" stop-opacity="0"/></radialGradient><filter id="glow3"><feGaussianBlur stdDeviation="12"/></filter></defs>
+        <rect width="1440" height="810" fill="url(#rl)"/>
+        <rect x="120" y="80" width="1200" height="560" fill="#1e1408" opacity="0.95"/>
+        <rect x="140" y="100" width="560" height="520" fill="#231808" stroke="#3a2810" stroke-width="1"/>
+        <rect x="740" y="100" width="560" height="520" fill="#231808" stroke="#3a2810" stroke-width="1"/>
+        <rect x="160" y="120" width="240" height="200" fill="none" stroke="#4a3418" stroke-width="1.5"/>
+        <rect x="420" y="120" width="240" height="200" fill="none" stroke="#4a3418" stroke-width="1.5"/>
+        <rect x="160" y="340" width="240" height="260" fill="none" stroke="#4a3418" stroke-width="1.5"/>
+        <rect x="420" y="340" width="240" height="260" fill="none" stroke="#4a3418" stroke-width="1.5"/>
+        <rect x="760" y="120" width="240" height="200" fill="none" stroke="#4a3418" stroke-width="1.5"/>
+        <rect x="1020" y="120" width="260" height="200" fill="none" stroke="#4a3418" stroke-width="1.5"/>
+        <rect x="760" y="340" width="240" height="260" fill="none" stroke="#4a3418" stroke-width="1.5"/>
+        <rect x="1020" y="340" width="260" height="260" fill="none" stroke="#4a3418" stroke-width="1.5"/>
+        <rect x="120" y="78" width="1200" height="12" fill="#4a3820"/>
+        <rect x="120" y="620" width="1200" height="18" fill="#4a3820"/>
+        <rect x="0" y="636" width="1440" height="174" fill="#1a1006"/>
+        <ellipse cx="480" cy="80" rx="160" ry="120" fill="url(#lp1)" opacity="0.6"/>
+        <ellipse cx="960" cy="80" rx="160" ry="120" fill="url(#lp2)" opacity="0.5"/>
+        <line x1="480" y1="0" x2="480" y2="90" stroke="#888" stroke-width="2"/>
+        <ellipse cx="480" cy="95" rx="20" ry="8" fill="#ddb860"/>
+        <ellipse cx="480" cy="92" rx="14" ry="5" fill="#ffeeaa"/>
+        <line x1="960" y1="0" x2="960" y2="90" stroke="#888" stroke-width="2"/>
+        <ellipse cx="960" cy="95" rx="20" ry="8" fill="#ddb860"/>
+        <ellipse cx="960" cy="92" rx="14" ry="5" fill="#ffeeaa"/>
+        <rect x="380" y="490" width="680" height="20" rx="4" fill="#3a2810"/>
+        <rect x="390" y="450" width="80" height="42" rx="6" fill="#4a3418"/>
+        <rect x="490" y="450" width="80" height="42" rx="6" fill="#4a3418"/>
+        <rect x="590" y="450" width="80" height="42" rx="6" fill="#4a3418"/>
+        <rect x="690" y="450" width="80" height="42" rx="6" fill="#4a3418"/>
+        <rect x="790" y="450" width="80" height="42" rx="6" fill="#4a3418"/>
+        <rect x="890" y="450" width="80" height="42" rx="6" fill="#4a3418"/>
+      </svg>
+    </div>
+    <div class="hero-content"><div class="hero-tag">Mekan</div><h1 class="hero-title">Mekânın<br><em>Ruhu</em></h1><p class="hero-sub">İç mimari konseptler</p></div>
+  </div>
+
+  <div class="slider-controls">
+    <button class="slider-btn" id="prevBtn">&#8592;</button>
+    <button class="slider-btn" id="nextBtn">&#8594;</button>
+  </div>
+  <div class="slider-dots" id="dots">
+    <div class="dot active" onclick="goToSlide(0)"></div>
+    <div class="dot" onclick="goToSlide(1)"></div>
+    <div class="dot" onclick="goToSlide(2)"></div>
+    <div class="dot" onclick="goToSlide(3)"></div>
+    <div class="dot" onclick="goToSlide(4)"></div>
+  </div>
+</section>
+
+
+<!-- TEXT SECTION -->
+<div style="background:var(--off-white);border-top:1px solid var(--light);border-bottom:1px solid var(--light);padding:72px 40px;">
+  <div style="max-width:720px;margin:0 auto;text-align:center;">
+    <div class="featured-label" style="justify-content:center;">Öne Çıkan Proje</div>
+    <h2 class="featured-title" style="font-size:48px;margin-bottom:24px;">Tasarımın<br><em>Sessiz Dili</em></h2>
+    <p class="featured-desc" style="margin-bottom:0;">Her çizgi bir niyet taşır. Araçtan mekâna, denizden asfalte uzanan bu yolculuk; formun özünü aramak ve onu saf biçimde ortaya koymak üzerine kurulu kişisel bir keşiftir.</p>
+  </div>
+</div>
+
+<!-- end homePage -->
+
+<!-- ══════ WORKS PAGE ══════ -->
+<div id="worksPage">
+  <div class="wp-header">
+    <h1 class="wp-title">Tüm <em>Çalışmalar</em></h1>
+    <p class="wp-subtitle" id="wpSubtitle">Kronolojik sırayla tüm tasarımlar</p>
+  </div>
+  <div class="wp-filters">
+    <button class="wp-filter-btn active" data-filter="all">Tümü</button>
+    <button class="wp-filter-btn" data-filter="otomobil">Otomobil</button>
+    <button class="wp-filter-btn" data-filter="motorsiklet">Motorsiklet</button>
+    <button class="wp-filter-btn" data-filter="yat">Yat</button>
+    <button class="wp-filter-btn" data-filter="ofis">Ofis</button>
+    <button class="wp-filter-btn" data-filter="mekan">Mekan</button>
+    <div class="wp-count" id="wpCount"></div>
+  </div>
+  <div class="wp-grid" id="wpGrid"></div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2MDAgMzYwIiB3aWR0aD0iNjAwIiBoZWlnaHQ9IjM2MCI+CiAgPGRlZnM+CiAgICA8c3R5bGU+QGltcG9ydCB1cmwoJ2h0dHBzOi8vZm9udHMuZ29vZ2xlYXBpcy5jb20vY3NzMj9mYW1pbHk9UGxheWZhaXIrRGlzcGxheTp3Z2h0QDkwMCZhbXA7ZmFtaWx5PUpvc3Q6d2dodEA1MDAmYW1wO2Rpc3BsYXk9c3dhcCcpOzwvc3R5bGU+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9InJpbUdyYWQiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMCUiIHkyPSIxMDAlIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgICBzdG9wLWNvbG9yPSIjYzBjMGMwIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iMjAlIiAgc3RvcC1jb2xvcj0iIzJhMmEyYSIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjQ4JSIgIHN0b3AtY29sb3I9IiM4ODgiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSI3MiUiICBzdG9wLWNvbG9yPSIjMTExIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2FhYSIvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICAgIDxyYWRpYWxHcmFkaWVudCBpZD0iZmFjZUZpbGwiIGN4PSI1MCUiIGN5PSIzOCUiIHI9IjU4JSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiICAgc3RvcC1jb2xvcj0iI2ZmZmZmZiIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNlOGU4ZTgiLz4KICAgIDwvcmFkaWFsR3JhZGllbnQ+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImJvcnVHcmFkIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjAlIiB5Mj0iMTAwJSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiICAgc3RvcC1jb2xvcj0iIzRhNGE0YSIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjM1JSIgIHN0b3AtY29sb3I9IiMwNTA1MDUiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSI2NSUiICBzdG9wLWNvbG9yPSIjMDAwMDAwIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzNhM2EzYSIvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICAgIDxmaWx0ZXIgaWQ9InRzIiB4PSItMiUiIHk9Ii01JSIgd2lkdGg9IjEwNCUiIGhlaWdodD0iMTE1JSI+CiAgICAgIDxmZURyb3BTaGFkb3cgZHg9IjEiIGR5PSIyLjUiIHN0ZERldmlhdGlvbj0iMSIgZmxvb2QtY29sb3I9IiMwMDAiIGZsb29kLW9wYWNpdHk9IjAuNiIvPgogICAgPC9maWx0ZXI+CiAgICA8ZmlsdGVyIGlkPSJkcyIgeD0iLTIlIiB5PSItMiUiIHdpZHRoPSIxMDQlIiBoZWlnaHQ9IjEwOCUiPgogICAgICA8ZmVEcm9wU2hhZG93IGR4PSIwIiBkeT0iMS41IiBzdGREZXZpYXRpb249IjAuNiIgZmxvb2QtY29sb3I9IiMwMDAiIGZsb29kLW9wYWNpdHk9IjAuMyIvPgogICAgPC9maWx0ZXI+CiAgPC9kZWZzPgoKICA8IS0tIE92YWwgZnJhbWUgLS0+CiAgPGVsbGlwc2UgY3g9IjMwMCIgY3k9IjE4MCIgcng9IjI5NiIgcnk9IjE3NSIgZmlsbD0iIzBkMGQwZCIvPgogIDxlbGxpcHNlIGN4PSIzMDAiIGN5PSIxODAiIHJ4PSIyODYiIHJ5PSIxNjUiIGZpbGw9InVybCgjcmltR3JhZCkiLz4KICA8ZWxsaXBzZSBjeD0iMzAwIiBjeT0iMTgwIiByeD0iMjcwIiByeT0iMTQ5IiBmaWxsPSIjMTExIi8+CiAgPGVsbGlwc2UgY3g9IjMwMCIgY3k9IjE4MCIgcng9IjI2MiIgcnk9IjE0MSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjYmJiIiBzdHJva2Utd2lkdGg9IjEuNSIvPgogIDxlbGxpcHNlIGN4PSIzMDAiIGN5PSIxODAiIHJ4PSIyNTYiIHJ5PSIxMzUiIGZpbGw9InVybCgjZmFjZUZpbGwpIi8+CiAgPGVsbGlwc2UgY3g9IjMwMCIgY3k9IjE4MCIgcng9IjI1NiIgcnk9IjEzNSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMTExIiBzdHJva2Utd2lkdGg9IjMiLz4KCiAgPCEtLSBDTElQOiBvbmx5IHJlbmRlciB0ZXh0IGluc2lkZSB0aGUgd2hpdGUgb3ZhbCBmYWNlIC0tPgogIDxjbGlwUGF0aCBpZD0iZmFjZUNsaXAiPgogICAgPGVsbGlwc2UgY3g9IjMwMCIgY3k9IjE4MCIgcng9IjI1MyIgcnk9IjEzMiIvPgogIDwvY2xpcFBhdGg+CgogIDxnIGNsaXAtcGF0aD0idXJsKCNmYWNlQ2xpcCkiPgogICAgPCEtLSBCw5ZSw5wg4oCUIGJhc2VsaW5lIGF0IDE3NSwgc28gYXNjZW5kZXJzK2RpYWNyaXRpY3Mgc3RheSBpbnNpZGUgb3ZhbCAtLT4KICAgIDx0ZXh0IHg9IjMwMCIgeT0iMTY4IgogICAgICBmb250LWZhbWlseT0iJ1BsYXlmYWlyIERpc3BsYXknLCdEaWRvdCcsJ0JvZG9uaSBNVCcsJ1RpbWVzIE5ldyBSb21hbicsc2VyaWYiCiAgICAgIGZvbnQtc2l6ZT0iMTA0IgogICAgICBmb250LXdlaWdodD0iOTAwIgogICAgICB0ZXh0LWFuY2hvcj0ibWlkZGxlIgogICAgICBsZXR0ZXItc3BhY2luZz0iNiIKICAgICAgZmlsbD0idXJsKCNib3J1R3JhZCkiCiAgICAgIGZpbHRlcj0idXJsKCN0cykiPkLDllLDnDwvdGV4dD4KCiAgICA8IS0tIERpdmlkZXIgbGluZXMgLS0+CiAgICA8bGluZSB4MT0iODAiICB5MT0iMTgyIiB4Mj0iNTIwIiB5Mj0iMTgyIiBzdHJva2U9IiM0NDQiIHN0cm9rZS13aWR0aD0iMS4yIi8+CiAgICA8bGluZSB4MT0iODAiICB5MT0iMTg2IiB4Mj0iNTIwIiB5Mj0iMTg2IiBzdHJva2U9IiNjY2MiIHN0cm9rZS13aWR0aD0iMC42Ii8+CgogICAgPCEtLSBERVNJR04gLS0+CiAgICA8dGV4dCB4PSIzMDAiIHk9IjI0NCIKICAgICAgZm9udC1mYW1pbHk9IidKb3N0JywnR2lsbCBTYW5zJywnQ2VudHVyeSBHb3RoaWMnLCdGdXR1cmEnLEFyaWFsLHNhbnMtc2VyaWYiCiAgICAgIGZvbnQtc2l6ZT0iNDIiCiAgICAgIGZvbnQtd2VpZ2h0PSI1MDAiCiAgICAgIHRleHQtYW5jaG9yPSJtaWRkbGUiCiAgICAgIGxldHRlci1zcGFjaW5nPSIyMCIKICAgICAgZmlsbD0iIzBkMGQwZCIKICAgICAgZmlsdGVyPSJ1cmwoI2RzKSI+REVTSUdOPC90ZXh0PgogIDwvZz4KCjwvc3ZnPg==" style="height:64px;cursor:pointer;display:block;object-fit:contain;" onclick="showHomeSlide('otomobil');goToSlide(0);" alt="Börü Design"/>
+        <p class="footer-tagline">Araçtan mekâna, formun saf keşfi. Kişisel bir tasarım portfolyosu.</p>
+      </div>
+      <div class="footer-cols">
+        <div class="footer-col">
+          <h5>Kategoriler</h5>
+          <ul>
+            <li onclick="showHomeSlide('otomobil')">Otomobil</li>
+            <li onclick="showHomeSlide('motorsiklet')">Motorsiklet</li>
+            <li onclick="showHomeSlide('yat')">Yat</li>
+            <li onclick="showHomeSlide('ofis')">Ofis & İş Yeri</li>
+            <li onclick="showHomeSlide('mekan')">Mekan</li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Site</h5>
+          <ul>
+            <li onclick="showWorks('all')">Tüm Çalışmalar</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2024 Börü Design</span>
+      <span class="footer-quote">Tasarım sözcüklerle ifade edilemeyen şeyleri görünür kılar.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ── SLIDER ──
+const slides = document.querySelectorAll('.slide');
+const dots   = document.querySelectorAll('.dot');
+const slideOrder = ['otomobil','motorsiklet','yat','ofis','mekan'];
+let current = 0, timer;
+
+function goToSlide(n) {
+  slides[current].classList.remove('active');
+  dots[current].classList.remove('active');
+  current = (n + slides.length) % slides.length;
+  slides[current].classList.add('active');
+  dots[current].classList.add('active');
+}
+function startTimer() { timer = setInterval(() => goToSlide(current+1), 5500); }
+document.getElementById('nextBtn').addEventListener('click',()=>{clearInterval(timer);goToSlide(current+1);startTimer();});
+document.getElementById('prevBtn').addEventListener('click',()=>{clearInterval(timer);goToSlide(current-1);startTimer();});
+startTimer();
+
+window.addEventListener('scroll',()=>{
+  document.getElementById('topbar').style.boxShadow = window.scrollY>10 ? '0 2px 20px rgba(0,0,0,0.07)' : 'none';
+});
+
+// ── PAGE SWITCHING ──
+function showWorks(cat) {
+  document.getElementById('homePage').style.display = 'none';
+  document.getElementById('worksPage').style.display = 'block';
+  renderWP(cat||'all');
+  // nav active
+  document.querySelectorAll('.cat-nav a').forEach(a => {
+    a.classList.toggle('active', a.dataset.cat === 'all');
+  });
+  window.scrollTo(0,0);
+}
+
+function showHomeSlide(cat) {
+  document.getElementById('worksPage').style.display = 'none';
+  document.getElementById('homePage').style.display = 'block';
+  // find slide index
+  const idx = slideOrder.indexOf(cat);
+  if (idx >= 0) { clearInterval(timer); goToSlide(idx); startTimer(); }
+  // nav active
+  document.querySelectorAll('.cat-nav a').forEach(a => {
+    a.classList.toggle('active', a.dataset.cat === cat);
+  });
+  window.scrollTo(0,0);
+}
+
+// ── NAV LINKS ──
+document.querySelectorAll('.cat-nav a').forEach(link => {
+  link.addEventListener('click', e => {
+    e.preventDefault();
+    if (link.dataset.page === 'works') showWorks('all');
+    else showHomeSlide(link.dataset.cat);
+  });
+});
+
+document.getElementById('allWorksBtn').addEventListener('click', e => { e.preventDefault(); showWorks('all'); });
+document.getElementById('logoLink').addEventListener('click', e => { e.preventDefault(); showHomeSlide('otomobil'); goToSlide(0); });
+
+// ── DESIGN DATA ──
+const designs=[
+  {id:1,cat:'otomobil',name:'Concept No. 01',detail:'Gran Turismo Serisi',date:'Aralık 2024',ts:new Date('2024-12-15'),thumb:'car1'},
+  {id:2,cat:'yat',name:'Maritime Form I',detail:'Açık Deniz Serisi',date:'Kasım 2024',ts:new Date('2024-11-20'),thumb:'yat1'},
+  {id:3,cat:'mekan',name:'Studio Interior',detail:'Minimal Mekan',date:'Kasım 2024',ts:new Date('2024-11-05'),thumb:'mekan1'},
+  {id:4,cat:'motorsiklet',name:'Moto Study 01',detail:'Naked Serisi',date:'Ekim 2024',ts:new Date('2024-10-18'),thumb:'moto1'},
+  {id:5,cat:'ofis',name:'Dark Office I',detail:'Executive Suite',date:'Ekim 2024',ts:new Date('2024-10-02'),thumb:'ofis1'},
+  {id:6,cat:'otomobil',name:'Concept No. 02',detail:'Roadster Serisi',date:'Eylül 2024',ts:new Date('2024-09-14'),thumb:'car2'},
+  {id:7,cat:'mekan',name:'Living Space II',detail:'Konut Tasarımı',date:'Eylül 2024',ts:new Date('2024-09-01'),thumb:'mekan2'},
+  {id:8,cat:'yat',name:'Maritime Form II',detail:'Motor Yat',date:'Ağustos 2024',ts:new Date('2024-08-22'),thumb:'yat2'},
+  {id:9,cat:'motorsiklet',name:'Moto Study 02',detail:'Cafe Racer',date:'Ağustos 2024',ts:new Date('2024-08-10'),thumb:'moto2'},
+];
+
+const thumbSVGs={
+car1:'<svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg"><rect width="800" height="600" fill="#1a1824"/><ellipse cx="400" cy="570" rx="300" ry="24" fill="black" opacity="0.5"/><path d="M80 375 Q120 338 200 308 L340 293 L460 293 L570 308 Q630 328 658 368 L678 398 L678 418 L80 418Z" fill="#3a3c50"/><path d="M200 308 L270 248 L440 236 L530 250 L570 308Z" fill="#2e3048"/><path d="M204 306 L268 250 L438 239 L526 252 L566 306Z" fill="#1a2038" opacity="0.88"/><ellipse cx="193" cy="423" rx="64" ry="64" fill="#111"/><ellipse cx="193" cy="423" rx="49" ry="49" fill="#1a1a1a" stroke="#333" stroke-width="2"/><ellipse cx="193" cy="423" rx="24" ry="24" fill="#444"/><ellipse cx="568" cy="423" rx="64" ry="64" fill="#111"/><ellipse cx="568" cy="423" rx="49" ry="49" fill="#1a1a1a" stroke="#333" stroke-width="2"/><ellipse cx="568" cy="423" rx="24" ry="24" fill="#444"/><ellipse cx="658" cy="356" rx="21" ry="11" fill="#ffeeaa"/><ellipse cx="658" cy="356" rx="13" ry="7" fill="white"/><rect x="82" y="370" width="22" height="10" rx="2" fill="#ff2200" opacity="0.8"/></svg>',
+car2:'<svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg"><rect width="800" height="600" fill="#0e1014"/><ellipse cx="400" cy="568" rx="290" ry="22" fill="black" opacity="0.5"/><path d="M62 378 Q102 343 182 316 L322 300 L480 300 L592 316 Q642 336 666 370 L678 398 L678 413 L62 413Z" fill="#c0392b"/><path d="M182 316 L250 256 L430 242 L528 258 L592 316Z" fill="#a93226"/><path d="M186 314 L252 260 L428 245 L524 260 L588 314Z" fill="#1a0808" opacity="0.85"/><ellipse cx="180" cy="418" rx="62" ry="62" fill="#111"/><ellipse cx="180" cy="418" rx="47" ry="47" fill="#1a1a1a" stroke="#333" stroke-width="2"/><ellipse cx="180" cy="418" rx="22" ry="22" fill="#555"/><ellipse cx="562" cy="418" rx="62" ry="62" fill="#111"/><ellipse cx="562" cy="418" rx="47" ry="47" fill="#1a1a1a" stroke="#333" stroke-width="2"/><ellipse cx="562" cy="418" rx="22" ry="22" fill="#555"/><ellipse cx="656" cy="358" rx="20" ry="11" fill="#ffeeaa"/><rect x="64" y="366" width="22" height="9" rx="2" fill="#ff2200" opacity="0.8"/></svg>',
+yat1:'<svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg"><rect width="800" height="600" fill="#0a1628"/><rect width="800" height="600" fill="#1a3a6a" opacity="0.55"/><circle cx="400" cy="155" r="52" fill="#ffeeaa" opacity="0.8"/><path d="M0 318 Q200 293 400 306 Q600 318 800 298 L800 600 L0 600Z" fill="#112244"/><line x1="400" y1="298" x2="400" y2="60" stroke="#ccc" stroke-width="3"/><path d="M400 65 L222 278 L400 278Z" fill="white" opacity="0.9"/><path d="M400 65 L552 278 L400 278Z" fill="white" opacity="0.7"/><path d="M102 278 Q260 303 400 306 Q540 303 698 278 L683 313 Q520 338 400 342 Q280 338 117 313Z" fill="#1a1a2e"/></svg>',
+yat2:'<svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg"><rect width="800" height="600" fill="#060e1c"/><path d="M0 275 Q200 255 400 268 Q600 278 800 260 L800 600 L0 600Z" fill="#0a1a30"/><path d="M82 268 Q280 238 400 248 Q520 238 702 258 L720 288 Q500 278 400 283 Q300 278 62 293Z" fill="#1a2a3a"/><rect x="382" y="118" width="9" height="152" fill="#888"/><path d="M391 118 L222 248 L391 248Z" fill="white" opacity="0.85"/><path d="M321 138 L182 238 L321 238Z" fill="white" opacity="0.6"/><path d="M391 138 L542 228 L391 228Z" fill="white" opacity="0.7"/><path d="M62 292 Q280 278 400 283 Q520 278 720 290 L720 308 Q500 298 400 303 Q300 298 62 310Z" fill="#0e1a28"/></svg>',
+mekan1:'<svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg"><rect width="800" height="600" fill="#1a1006"/><rect x="60" y="40" width="680" height="450" fill="#231808"/><rect x="80" y="60" width="295" height="408" fill="#251a08" stroke="#3a2810" stroke-width="1"/><rect x="425" y="60" width="295" height="408" fill="#251a08" stroke="#3a2810" stroke-width="1"/><rect x="60" y="38" width="680" height="10" fill="#4a3820"/><rect x="0" y="468" width="800" height="132" fill="#100a04"/><ellipse cx="258" cy="38" rx="98" ry="78" fill="#ffcc66" opacity="0.33"/><ellipse cx="542" cy="38" rx="98" ry="78" fill="#ffdd88" opacity="0.26"/><line x1="258" y1="0" x2="258" y2="46" stroke="#888" stroke-width="2"/><ellipse cx="258" cy="50" rx="15" ry="6" fill="#cc9930"/><line x1="542" y1="0" x2="542" y2="46" stroke="#888" stroke-width="2"/><ellipse cx="542" cy="50" rx="15" ry="6" fill="#cc9930"/><rect x="182" y="358" width="436" height="14" rx="3" fill="#3a2810"/><rect x="196" y="308" width="118" height="52" rx="5" fill="#4a3418"/><rect x="342" y="308" width="118" height="52" rx="5" fill="#4a3418"/><rect x="488" y="308" width="118" height="52" rx="5" fill="#4a3418"/></svg>',
+mekan2:'<svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg"><rect width="800" height="600" fill="#f5f2ee"/><rect x="0" y="0" width="800" height="418" fill="#e8e4de"/><rect x="0" y="418" width="800" height="182" fill="#d8d2c8"/><rect x="50" y="50" width="298" height="338" fill="#ddd9d2" stroke="#c8c2b8" stroke-width="1"/><rect x="452" y="50" width="298" height="338" fill="#ddd9d2" stroke="#c8c2b8" stroke-width="1"/><rect x="54" y="54" width="290" height="330" fill="#c8d8e8" opacity="0.45"/><rect x="456" y="54" width="290" height="330" fill="#c8d8e8" opacity="0.45"/><rect x="182" y="356" width="436" height="66" rx="3" fill="#c8a870"/><rect x="302" y="288" width="196" height="68" rx="3" fill="#f0ece6" stroke="#d0c8bc" stroke-width="1"/></svg>',
+moto1:'<svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg"><rect width="800" height="600" fill="#0a0a0a"/><rect x="0" y="378" width="800" height="222" fill="#111"/><circle cx="178" cy="366" r="89" fill="#111"/><circle cx="178" cy="366" r="74" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="2"/><circle cx="178" cy="366" r="44" fill="#222"/><circle cx="178" cy="366" r="19" fill="#444"/><circle cx="590" cy="366" r="89" fill="#111"/><circle cx="590" cy="366" r="74" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="2"/><circle cx="590" cy="366" r="44" fill="#222"/><circle cx="590" cy="366" r="19" fill="#444"/><path d="M178 278 L338 236 L478 253 L590 276" stroke="#666" stroke-width="6" fill="none"/><path d="M178 276 L246 366 L398 366 L488 366" stroke="#555" stroke-width="5" fill="none"/><path d="M293 236 Q398 208 478 233 L478 263 Q398 242 296 266Z" fill="#cc2200"/><path d="M478 243 Q538 218 568 236 L582 258 L568 258 L478 273Z" fill="#cc2200"/><ellipse cx="576" cy="268" rx="18" ry="12" fill="#ffeeaa"/><ellipse cx="576" cy="268" rx="11" ry="7" fill="white"/><path d="M478 256 Q462 256 450 363" stroke="#555" stroke-width="8" fill="none"/><path d="M508 256 Q496 256 488 363" stroke="#555" stroke-width="8" fill="none"/><rect x="308" y="263" width="118" height="68" rx="5" fill="#1e1e1e"/></svg>',
+moto2:'<svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg"><rect width="800" height="600" fill="#161616"/><rect x="0" y="388" width="800" height="212" fill="#1a1a1a"/><circle cx="185" cy="372" r="87" fill="#0e0e0e"/><circle cx="185" cy="372" r="71" fill="#181818" stroke="#282828" stroke-width="2"/><circle cx="185" cy="372" r="41" fill="#222"/><circle cx="185" cy="372" r="17" fill="#555"/><circle cx="596" cy="372" r="87" fill="#0e0e0e"/><circle cx="596" cy="372" r="71" fill="#181818" stroke="#282828" stroke-width="2"/><circle cx="596" cy="372" r="41" fill="#222"/><circle cx="596" cy="372" r="17" fill="#555"/><path d="M185 286 L348 242 L490 260 L596 286" stroke="#888" stroke-width="6" fill="none"/><path d="M185 286 L254 372 L398 372 L498 372" stroke="#777" stroke-width="5" fill="none"/><path d="M298 242 Q408 216 490 242 L490 270 Q408 248 302 270Z" fill="#555"/><path d="M490 250 Q548 226 576 244 L588 266 L576 266 L490 278Z" fill="#444"/><ellipse cx="580" cy="276" rx="17" ry="11" fill="#ffcc88"/><rect x="314" y="270" width="114" height="66" rx="4" fill="#222"/></svg>',
+ofis1:'<svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg"><rect width="800" height="600" fill="#0c0c0e"/><rect x="30" y="48" width="198" height="358" fill="#050a14"/><rect x="34" y="52" width="190" height="350" fill="#060c18"/><rect x="48" y="198" width="6" height="178" fill="#ffdd66" opacity="0.33"/><rect x="66" y="158" width="8" height="218" fill="#ffcc44" opacity="0.28"/><rect x="108" y="138" width="10" height="238" fill="#ffcc44" opacity="0.3"/><rect x="156" y="168" width="8" height="208" fill="#aaccff" opacity="0.23"/><rect x="200" y="148" width="24" height="228" fill="#ffdd66" opacity="0.32"/><rect x="30" y="44" width="202" height="366" fill="none" stroke="#1a1a1a" stroke-width="5"/><line x1="128" y1="44" x2="128" y2="410" stroke="#1a1a1a" stroke-width="3"/><line x1="30" y1="228" x2="232" y2="228" stroke="#1a1a1a" stroke-width="3"/><rect x="572" y="48" width="198" height="358" fill="#050a14"/><rect x="576" y="52" width="190" height="350" fill="#060c18"/><rect x="588" y="188" width="6" height="188" fill="#ffdd66" opacity="0.31"/><rect x="650" y="128" width="10" height="248" fill="#ffcc44" opacity="0.33"/><rect x="720" y="208" width="5" height="168" fill="#ffcc44" opacity="0.28"/><rect x="742" y="148" width="24" height="228" fill="#ffdd66" opacity="0.32"/><rect x="572" y="44" width="202" height="366" fill="none" stroke="#1a1a1a" stroke-width="5"/><line x1="670" y1="44" x2="670" y2="410" stroke="#1a1a1a" stroke-width="3"/><line x1="572" y1="228" x2="774" y2="228" stroke="#1a1a1a" stroke-width="3"/><rect x="0" y="474" width="800" height="126" fill="#0a0a0c"/><rect x="182" y="428" width="436" height="50" rx="2" fill="#1e1a14"/><rect x="357" y="328" width="188" height="118" rx="4" fill="#0a0a10"/><rect x="364" y="335" width="174" height="104" rx="2" fill="#0a1020"/><rect x="370" y="341" width="78" height="6" rx="1" fill="#4488ff" opacity="0.63"/><rect x="370" y="372" width="36" height="38" rx="1" fill="#0e1828" stroke="#1a3050" stroke-width="1"/><rect x="412" y="372" width="36" height="38" rx="1" fill="#0e1828" stroke="#1a3050" stroke-width="1"/><rect x="454" y="372" width="36" height="38" rx="1" fill="#0e1828" stroke="#1a3050" stroke-width="1"/><rect x="438" y="448" width="20" height="12" rx="1" fill="#0e0e10"/><rect x="340" y="472" width="198" height="9" rx="2" fill="#1a1a1a"/></svg>',
+};
+
+const catLabels={otomobil:'Otomobil',motorsiklet:'Motorsiklet',yat:'Yat',ofis:'Ofis',mekan:'Mekan'};
+const catDesc={all:'Kronolojik sırayla tüm tasarımlar',otomobil:'Otomobil tasarımları',motorsiklet:'Motorsiklet tasarımları',yat:'Yat tasarımları',ofis:'Ofis ve iş yeri tasarımları',mekan:'Mekan ve iç mimari tasarımları'};
+
+function renderWP(cat) {
+  const grid = document.getElementById('wpGrid');
+  document.getElementById('wpSubtitle').textContent = catDesc[cat]||'';
+  const filtered = [...designs].sort((a,b)=>b.ts-a.ts).filter(d=>cat==='all'||d.cat===cat);
+  document.getElementById('wpCount').textContent = filtered.length + ' tasarım';
+  // sync filter btns
+  document.querySelectorAll('.wp-filter-btn').forEach(b=>{
+    b.classList.toggle('active', b.dataset.filter===cat);
+  });
+  if (!filtered.length) { grid.innerHTML='<div class="wp-empty">Bu kategoride henüz tasarım yok.</div>'; return; }
+  grid.innerHTML = filtered.map(d=>`
+    <a class="wp-card" href="#" onclick="return false;">
+      <div class="wp-card-photo">
+        <div class="wp-card-photo-inner">${thumbSVGs[d.thumb]||''}</div>
+        <div class="wp-card-badge">${catLabels[d.cat]}</div>
+        <div class="wp-card-num">1/1</div>
+      </div>
+      <div class="wp-card-bottom">
+        <div>
+          <div class="wp-card-bottom-name">${d.name}</div>
+          <div class="wp-card-bottom-detail">${d.detail}</div>
+        </div>
+        <div class="wp-card-bottom-date">${d.date}</div>
+      </div>
+    </a>`).join('');
+}
+
+// Filter buttons inside works page
+document.querySelectorAll('.wp-filter-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>renderWP(btn.dataset.filter));
+});
+
+// Start on HOME page
+document.getElementById('worksPage').style.display='none';
+document.getElementById('homePage').style.display='block';
+document.querySelectorAll('.cat-nav a').forEach((a,i)=>a.classList.toggle('active',i===0));
+
+// ── DRAG / SWIPE ON HERO ──
+(function(){
+  const hero = document.querySelector('.hero');
+  let startX = 0, isDragging = false, moved = false;
+
+  hero.style.cursor = 'grab';
+
+  hero.addEventListener('mousedown', e => {
+    startX = e.clientX;
+    isDragging = true;
+    moved = false;
+    hero.style.cursor = 'grabbing';
+  });
+
+  hero.addEventListener('mousemove', e => {
+    if (!isDragging) return;
+    if (Math.abs(e.clientX - startX) > 8) moved = true;
+  });
+
+  hero.addEventListener('mouseup', e => {
+    if (!isDragging) return;
+    isDragging = false;
+    hero.style.cursor = 'grab';
+    if (!moved) return;
+    const diff = e.clientX - startX;
+    if (diff < -40) { clearInterval(timer); goToSlide(current + 1); startTimer(); }
+    else if (diff > 40) { clearInterval(timer); goToSlide(current - 1); startTimer(); }
+  });
+
+  hero.addEventListener('mouseleave', e => {
+    if (isDragging) {
+      isDragging = false;
+      hero.style.cursor = 'grab';
+    }
+  });
+
+  // Touch support
+  hero.addEventListener('touchstart', e => { startX = e.touches[0].clientX; moved = false; }, {passive:true});
+  hero.addEventListener('touchmove',  e => { if (Math.abs(e.touches[0].clientX - startX) > 8) moved = true; }, {passive:true});
+  hero.addEventListener('touchend',   e => {
+    if (!moved) return;
+    const diff = e.changedTouches[0].clientX - startX;
+    if (diff < -40) { clearInterval(timer); goToSlide(current + 1); startTimer(); }
+    else if (diff > 40) { clearInterval(timer); goToSlide(current - 1); startTimer(); }
+  });
+
+  // Prevent text selection while dragging
+  hero.addEventListener('dragstart', e => e.preventDefault());
+})();
+
+</script>
+
+<!-- ══════ LOGIN MODAL ══════ -->
+<div id="loginModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:1000;display:none;align-items:center;justify-content:center;backdrop-filter:blur(4px);">
+  <div style="background:#fff;width:360px;padding:48px 40px;position:relative;">
+    <button onclick="closeLogin()" style="position:absolute;top:16px;right:20px;background:none;border:none;font-size:20px;cursor:pointer;color:#999;">×</button>
+    <h2 style="font-family:'Playfair Display',serif;font-size:28px;font-weight:400;margin-bottom:8px;">Giriş</h2>
+    <p style="font-family:'EB Garamond',serif;font-size:15px;font-style:italic;color:#999;margin-bottom:32px;">Admin paneline erişim</p>
+    <label style="font-family:'Jost',sans-serif;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:#888;display:block;margin-bottom:8px;">Şifre</label>
+    <input id="pwInput" type="password" placeholder="••••••" style="width:100%;border:1px solid #ddd;padding:12px 14px;font-family:'Jost',sans-serif;font-size:14px;outline:none;margin-bottom:12px;" onkeydown="if(event.key==='Enter')checkLogin()"/>
+    <p id="loginError" style="color:#cc2200;font-family:'Jost',sans-serif;font-size:12px;margin-bottom:12px;display:none;">Şifre yanlış, tekrar deneyin.</p>
+    <button onclick="checkLogin()" style="width:100%;background:#111;color:#fff;border:none;padding:14px;font-family:'Jost',sans-serif;font-size:12px;letter-spacing:0.15em;text-transform:uppercase;cursor:pointer;">Giriş Yap</button>
+  </div>
+</div>
+
+<!-- ══════ ADMIN PANEL ══════ -->
+<div id="adminPanel" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:1000;align-items:flex-start;justify-content:center;backdrop-filter:blur(4px);overflow-y:auto;padding:40px 20px;">
+  <div style="background:#fff;width:100%;max-width:680px;margin:0 auto;padding:48px 44px;position:relative;">
+    <button onclick="closeAdmin()" style="position:absolute;top:16px;right:20px;background:none;border:none;font-size:22px;cursor:pointer;color:#999;">×</button>
+
+    <!-- Welcome -->
+    <div id="adminWelcome">
+      <h2 style="font-family:'Playfair Display',serif;font-size:36px;font-weight:400;margin-bottom:6px;">Hoş geldin, <em style="font-style:italic;">İbrahim</em></h2>
+      <p style="font-family:'EB Garamond',serif;font-size:16px;font-style:italic;color:#999;margin-bottom:40px;">Ne yapmak istersin?</p>
+      <button onclick="showAddForm()" style="display:inline-flex;align-items:center;gap:12px;background:#111;color:#fff;border:none;padding:16px 36px;font-family:'Jost',sans-serif;font-size:12px;letter-spacing:0.15em;text-transform:uppercase;cursor:pointer;">+ Tasarım Ekle</button>
+    </div>
+
+    <!-- Add Design Form -->
+    <div id="addDesignForm" style="display:none;">
+      <button onclick="showWelcome()" style="background:none;border:none;font-family:'Jost',sans-serif;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:#999;cursor:pointer;margin-bottom:32px;display:flex;align-items:center;gap:8px;">← Geri</button>
+      <h3 style="font-family:'Playfair Display',serif;font-size:28px;font-weight:400;margin-bottom:32px;">Yeni Tasarım</h3>
+
+      <!-- Category -->
+      <label style="font-family:'Jost',sans-serif;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:#888;display:block;margin-bottom:10px;">Kategori</label>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px;" id="catSelector">
+        <button class="cat-pick active" data-val="otomobil" onclick="pickCat(this)">Otomobil</button>
+        <button class="cat-pick" data-val="motorsiklet" onclick="pickCat(this)">Motorsiklet</button>
+        <button class="cat-pick" data-val="yat" onclick="pickCat(this)">Yat</button>
+        <button class="cat-pick" data-val="ofis" onclick="pickCat(this)">Ofis</button>
+        <button class="cat-pick" data-val="mekan" onclick="pickCat(this)">Mekan</button>
+      </div>
+
+      <!-- Name -->
+      <label style="font-family:'Jost',sans-serif;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:#888;display:block;margin-bottom:10px;">Tasarım Adı</label>
+      <input id="designName" type="text" placeholder="örn. Concept No. 03" style="width:100%;border:1px solid #ddd;padding:12px 14px;font-family:'Jost',sans-serif;font-size:14px;outline:none;margin-bottom:28px;"/>
+
+      <!-- Detail -->
+      <label style="font-family:'Jost',sans-serif;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:#888;display:block;margin-bottom:10px;">Detay / Seri</label>
+      <input id="designDetail" type="text" placeholder="örn. Gran Turismo Serisi" style="width:100%;border:1px solid #ddd;padding:12px 14px;font-family:'Jost',sans-serif;font-size:14px;outline:none;margin-bottom:28px;"/>
+
+      <!-- Photos -->
+      <label style="font-family:'Jost',sans-serif;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:#888;display:block;margin-bottom:14px;">Fotoğraflar <span style="color:#bbb;font-size:10px;text-transform:none;letter-spacing:0;">(en az 1, en fazla 9)</span></label>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:32px;" id="photoGrid">
+      </div>
+
+      <p id="saveError" style="color:#cc2200;font-family:'Jost',sans-serif;font-size:12px;margin-bottom:12px;display:none;"></p>
+      <button onclick="saveDesign()" style="width:100%;background:#111;color:#fff;border:none;padding:16px;font-family:'Jost',sans-serif;font-size:12px;letter-spacing:0.15em;text-transform:uppercase;cursor:pointer;">Kaydet</button>
+    </div>
+
+  </div>
+</div>
+
+<style>
+.cat-pick{font-family:'Jost',sans-serif;font-size:12px;letter-spacing:0.1em;text-transform:uppercase;border:1px solid #ddd;background:#fff;color:#888;padding:8px 18px;cursor:pointer;transition:all 0.2s;}
+.cat-pick.active{background:#111;color:#fff;border-color:#111;}
+.photo-slot{aspect-ratio:4/3;border:1px dashed #ddd;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;position:relative;overflow:hidden;background:#fafafa;transition:border-color 0.2s;}
+.photo-slot:hover{border-color:#aaa;}
+.photo-slot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+.photo-slot-label{font-family:'Jost',sans-serif;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:#bbb;}
+.photo-slot-plus{font-size:24px;color:#ccc;margin-bottom:6px;}
+.photo-remove{position:absolute;top:6px;right:6px;background:rgba(0,0,0,0.5);color:#fff;border:none;width:22px;height:22px;border-radius:50%;font-size:12px;cursor:pointer;display:none;align-items:center;justify-content:center;}
+.photo-slot:hover .photo-remove{display:flex;}
+</style>
+
+<script>
+// ── SUB CAT BAR ──
+function goToWorks(cat, el) {
+  document.querySelectorAll('.sub-cat-link').forEach(s => s.classList.remove('active'));
+  if (el) el.classList.add('active');
+  showWorks(cat);
+}
+
+// ── AUTH ──
+const ADMIN_PW = '2121';
+let isLoggedIn = false;
+
+document.getElementById('loginBtn').addEventListener('click', () => {
+  document.getElementById('loginModal').style.display = 'flex';
+  setTimeout(()=>document.getElementById('pwInput').focus(), 100);
+});
+
+function closeLogin() {
+  document.getElementById('loginModal').style.display = 'none';
+  document.getElementById('pwInput').value = '';
+  document.getElementById('loginError').style.display = 'none';
+}
+
+function checkLogin() {
+  const pw = document.getElementById('pwInput').value;
+  if (pw === ADMIN_PW) {
+    isLoggedIn = true;
+    closeLogin();
+    openAdmin();
+  } else {
+    document.getElementById('loginError').style.display = 'block';
+    document.getElementById('pwInput').value = '';
+    document.getElementById('pwInput').focus();
+  }
+}
+
+// ── ADMIN PANEL ──
+function openAdmin() {
+  showWelcome();
+  document.getElementById('adminPanel').style.display = 'flex';
+}
+
+function closeAdmin() {
+  document.getElementById('adminPanel').style.display = 'none';
+}
+
+function showWelcome() {
+  document.getElementById('adminWelcome').style.display = 'block';
+  document.getElementById('addDesignForm').style.display = 'none';
+}
+
+function showAddForm() {
+  document.getElementById('adminWelcome').style.display = 'none';
+  document.getElementById('addDesignForm').style.display = 'block';
+  buildPhotoGrid();
+  document.getElementById('designName').value = '';
+  document.getElementById('designDetail').value = '';
+  document.getElementById('saveError').style.display = 'none';
+  selectedCat = 'otomobil';
+  document.querySelectorAll('.cat-pick').forEach(b => b.classList.toggle('active', b.dataset.val === 'otomobil'));
+}
+
+// ── CATEGORY PICKER ──
+let selectedCat = 'otomobil';
+function pickCat(btn) {
+  selectedCat = btn.dataset.val;
+  document.querySelectorAll('.cat-pick').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+// ── PHOTO SLOTS ──
+const photoFiles = new Array(9).fill(null);   // base64 strings
+const photoDataURLs = new Array(9).fill(null);
+
+function buildPhotoGrid() {
+  const grid = document.getElementById('photoGrid');
+  photoFiles.fill(null); photoDataURLs.fill(null);
+  grid.innerHTML = Array.from({length:9}, (_,i) => `
+    <div class="photo-slot" id="slot${i}" onclick="triggerUpload(${i})">
+      <div class="photo-slot-plus">+</div>
+      <div class="photo-slot-label">Fotoğraf ${i+1}</div>
+      <button class="photo-remove" id="rm${i}" onclick="removePhoto(event,${i})">×</button>
+      <input type="file" id="fi${i}" accept="image/*" style="display:none" onchange="handlePhoto(${i},this)"/>
+    </div>`).join('');
+}
+
+function triggerUpload(i) {
+  document.getElementById('fi'+i).click();
+}
+
+function handlePhoto(i, input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    photoDataURLs[i] = e.target.result;
+    const slot = document.getElementById('slot'+i);
+    // remove old img if any
+    const old = slot.querySelector('img');
+    if (old) old.remove();
+    slot.querySelector('.photo-slot-plus').style.display = 'none';
+    slot.querySelector('.photo-slot-label').style.display = 'none';
+    const img = document.createElement('img');
+    img.src = e.target.result;
+    slot.insertBefore(img, slot.querySelector('.photo-remove'));
+    document.getElementById('rm'+i).style.display = 'flex';
+  };
+  reader.readAsDataURL(file);
+}
+
+function removePhoto(e, i) {
+  e.stopPropagation();
+  photoDataURLs[i] = null;
+  const slot = document.getElementById('slot'+i);
+  const img = slot.querySelector('img');
+  if (img) img.remove();
+  slot.querySelector('.photo-slot-plus').style.display = '';
+  slot.querySelector('.photo-slot-label').style.display = '';
+  document.getElementById('rm'+i).style.display = 'none';
+  document.getElementById('fi'+i).value = '';
+}
+
+// ── SAVE DESIGN ──
+function saveDesign() {
+  const name   = document.getElementById('designName').value.trim();
+  const detail = document.getElementById('designDetail').value.trim();
+  const photos = photoDataURLs.filter(Boolean);
+
+  if (!name) {
+    const err = document.getElementById('saveError');
+    err.textContent = 'Lütfen tasarım adı girin.';
+    err.style.display = 'block'; return;
+  }
+  if (photos.length === 0) {
+    const err = document.getElementById('saveError');
+    err.textContent = 'En az 1 fotoğraf ekleyin.';
+    err.style.display = 'block'; return;
+  }
+
+  const now = new Date();
+  const months = ['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
+  const dateStr = months[now.getMonth()] + ' ' + now.getFullYear();
+
+  const newDesign = {
+    id: Date.now(),
+    cat: selectedCat,
+    name: name,
+    detail: detail || catLabels[selectedCat] + ' Serisi',
+    date: dateStr,
+    ts: now.toISOString(),
+    photos: photos   // array of base64 dataURLs
+  };
+
+  // Save to localStorage
+  const saved = JSON.parse(localStorage.getItem('boruDesigns') || '[]');
+  saved.unshift(newDesign);
+  localStorage.setItem('boruDesigns', JSON.stringify(saved));
+
+  closeAdmin();
+  showWorks('all');
+
+  // Show success toast
+  const toast = document.createElement('div');
+  toast.textContent = '✓ Tasarım eklendi';
+  toast.style.cssText = 'position:fixed;bottom:32px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:14px 28px;font-family:Jost,sans-serif;font-size:13px;letter-spacing:0.08em;z-index:9999;';
+  document.body.appendChild(toast);
+  setTimeout(()=>toast.remove(), 2800);
+}
+
+// ── LOAD SAVED DESIGNS FROM LOCALSTORAGE ──
+function loadSavedDesigns() {
+  const saved = JSON.parse(localStorage.getItem('boruDesigns') || '[]');
+  return saved.map(d => ({...d, ts: new Date(d.ts)}));
+}
+
+// ── OVERRIDE renderWP to include saved designs ──
+const _origRenderWP = renderWP;
+renderWP = function(cat) {
+  const grid = document.getElementById('wpGrid');
+  document.getElementById('wpSubtitle').textContent = catDesc[cat]||'';
+
+  const savedDesigns = loadSavedDesigns();
+  const allDesigns = [...savedDesigns, ...designs].sort((a,b) => new Date(b.ts) - new Date(a.ts));
+  const filtered = allDesigns.filter(d => cat==='all' || d.cat===cat);
+
+  document.getElementById('wpCount').textContent = filtered.length + ' tasarım';
+  document.querySelectorAll('.wp-filter-btn').forEach(b => b.classList.toggle('active', b.dataset.filter===cat));
+
+  if (!filtered.length) { grid.innerHTML='<div class="wp-empty">Bu kategoride henüz tasarım yok.</div>'; return; }
+
+  grid.innerHTML = filtered.map(d => {
+    // thumbnail: use first uploaded photo or SVG fallback
+    const thumbContent = (d.photos && d.photos[0])
+      ? `<img src="${d.photos[0]}" style="width:100%;height:100%;object-fit:cover;display:block;"/>`
+      : (thumbSVGs[d.thumb] || '<div style="width:100%;height:100%;background:#eee;"></div>');
+
+    const photoCount = d.photos ? d.photos.filter(Boolean).length : 1;
+
+    return `
+    <a class="wp-card" href="#" onclick="return false;">
+      <div class="wp-card-photo">
+        <div class="wp-card-photo-inner">${thumbContent}</div>
+        <div class="wp-card-badge">${catLabels[d.cat]}</div>
+        <div class="wp-card-num">1/${photoCount}</div>
+      </div>
+      <div class="wp-card-bottom">
+        <div>
+          <div class="wp-card-bottom-name">${d.name}</div>
+          <div class="wp-card-bottom-detail">${d.detail}</div>
+        </div>
+        <div class="wp-card-bottom-date">${d.date}</div>
+      </div>
+    </a>`;
+  }).join('');
+};
+
+// Re-render on start to include any saved designs
+document.addEventListener('DOMContentLoaded', () => {
+  if (document.getElementById('worksPage').style.display !== 'none') {
+    renderWP('all');
+  }
+});
+</script>
+
+</body>
+</html>
